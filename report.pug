@@ -9,29 +9,42 @@ html(lang="en")
     h1=schemaName
 
     h2 Tables
-    each table in tables
-      a(href=`#${table.name}`)=table.name
-      nbsp
+    table
+      thead
+        tr 
+          th Table Name
+          th Est Row Count
+          th Last Updated
+      tbody
+        each table in tables
+          tr
+            td
+              a(href=`#${table.name}`)=table.name
+            td=numeral(table.count).format('0,0')
+            td=table.lastUpdated ? moment(table.lastUpdated).format('YYYY/MM/DD') : ''
     
     each table in tables
       h2(id=table.name)=table.name
       
-      .count=`Count: ${table.count}`
+      div=`Count: ${numeral(table.count).format('0,0')}`
+      div=`Last updated: ${table.lastUpdated ? moment(table.lastUpdated).format('DD/MM/YYYY HH:mm:SS ZZ') : ''}`
 
       table
-        tr
-          th Field Name
-          th Required
-          th Default
-          th Type
-          th Primary Key
-        each field in table.fields
-          tr  
-            td=field.column_name
-            td=field.is_nullable === 'YES' ? '' : 'YES'
-            td=field.column_default
-            td=field.data_type
-            td=field.is_identity
+        thead
+          tr
+            th Field Name
+            th Required
+            th Default
+            th Type
+            th Primary Key
+        tbody
+          each field in table.fields
+            tr  
+              td=field.column_name
+              td=field.is_nullable !== 'YES' ? 'YES' : ''
+              td=field.column_default
+              td=field.data_type
+              td=field.is_identity === 'YES' ? 'YES' : ''
 
       each sample in table.samples
         pre=`${JSON.stringify(sample, null, 4)}`
