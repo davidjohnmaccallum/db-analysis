@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet" href="report.css")
+    title DB Analysis
+  body
+    h1=schemaName
+
+    h2 Tables
+    each table in tables
+      a(href=`#${table.name}`)=table.name
+      nbsp
+    
+    each table in tables
+      h2(id=table.name)=table.name
+      
+      .count=`Count: ${table.count}`
+
+      table
+        tr
+          th Field Name
+          th Required
+          th Default
+          th Type
+          th Primary Key
+        each field in table.fields
+          tr  
+            td=field.column_name
+            td=field.is_nullable === 'YES' ? '' : 'YES'
+            td=field.column_default
+            td=field.data_type
+            td=field.is_identity
+
+      each sample in table.samples
+        pre=`${JSON.stringify(sample, null, 4)}`
+
+
+
